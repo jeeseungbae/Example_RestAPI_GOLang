@@ -1,17 +1,45 @@
 package repository
 
-var Boards []Board
+import (
+	"main/model"
+	"time"
+)
 
-type Board struct {
-	Id     int    `json:"id"`
-	Title  string `json:"title"`
-	Writer string `json:"writer"`
-	Text   string `json:"text"`
+const (
+	ONE  = 1
+	ZERO = 0
+)
+
+func Create(bodyData model.Board) model.Board {
+	bodyData.Id = len(model.Boards) + ONE
+	bodyData.CreatedAt = time.Now()
+	model.Boards = append(model.Boards, bodyData)
+	return bodyData
 }
 
-func init() {
-	Boards = []Board{
-		{Id: 1, Title: "this is title", Writer: "JSB", Text: "작성 내용 입력"},
-		{Id: 2, Title: "this is a title", Writer: "admin", Text: "작성 내용을 입력하세요."},
+func ReadById(sequenceNumber int) model.Board {
+	return model.Boards[sequenceNumber-ONE]
+}
+
+func ReadAll() []model.Board {
+	return model.Boards
+}
+
+func ModifyById(sequenceNumber int, resource model.Board) model.Board {
+	model.Boards[sequenceNumber-ONE] = resource
+	return resource
+}
+
+func DeleteById(sequenceNumber int) model.Board {
+	deleteData := model.Boards[sequenceNumber-ONE]
+	indexIdSetUp(sequenceNumber-ONE, model.Boards)
+	return deleteData
+}
+
+func indexIdSetUp(index int, boards []model.Board) {
+	createdBoards := append(boards[:index], boards[index+ONE:]...)
+	for i := ONE; i <= len(createdBoards); i++ {
+		createdBoards[i-ONE].Id = i
 	}
+	model.Boards = createdBoards
 }
