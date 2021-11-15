@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"main/application"
-	"main/repository"
+	"main/model"
 
 	"github.com/gorilla/mux"
 )
@@ -17,10 +17,10 @@ const (
 )
 
 func Create(responseWriter http.ResponseWriter, request *http.Request) {
-	var bodyData repository.Board
+	var bodyData model.Board
 	json.NewDecoder(request.Body).Decode(&bodyData)
 
-	if application.IsBodyPresent(bodyData) {
+	if application.IsBodyPresent(&bodyData) {
 		responseWriter.Header().Set("Content-Type", "application/json")
 		responseWriter.WriteHeader(http.StatusCreated)
 		responseMessage(responseWriter, application.Create(bodyData))
@@ -58,7 +58,7 @@ func ReadById(responseWriter http.ResponseWriter, request *http.Request) {
 
 func ModifyById(responseWriter http.ResponseWriter, request *http.Request) {
 	sequenceNumber, _ := strconv.Atoi(mux.Vars(request)["id"])
-	var bodyData repository.Board
+	var bodyData model.Board
 	json.NewDecoder(request.Body).Decode(&bodyData)
 
 	if application.ValidateId(sequenceNumber) {
