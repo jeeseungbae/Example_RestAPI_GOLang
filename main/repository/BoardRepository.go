@@ -27,6 +27,7 @@ func ReadAll() []model.Board {
 
 func ModifyById(sequenceNumber int, resource model.Board) model.Board {
 	model.Boards[sequenceNumber-ONE] = resource
+	model.Boards[sequenceNumber-ONE].ModifiedAt = time.Now()
 	return resource
 }
 

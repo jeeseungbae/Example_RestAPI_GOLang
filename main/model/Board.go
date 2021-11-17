@@ -19,11 +19,11 @@ type Board struct {
 func init() {
 	Boards = []Board{}
 
-	for i := 1; i < 100; i++ {
+	for i := 1; i < 10; i++ {
 		Boards = append(Boards, Board{
 			Id:        i,
 			Title:     "this is title" + strconv.Itoa(i),
-			Writer:    "JSB" + strconv.Itoa(i),
+			Writer:    "JeeSeungBae" + strconv.Itoa(i),
 			Text:      "작성 내용 입력" + strconv.Itoa(i),
 			CreatedAt: time.Now(),
 		})
