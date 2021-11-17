@@ -1,12 +1,5 @@
 ## Go언어 RestAPI 연습
 
-### Requirements
-- Code Convention 숙지
-- Restful API 숙지
-- golang을 활용한 Q&A (읽기,목록,등록,수정,삭제)
-- Curl, Jmeter에 대한 사용 방법 숙지
-- Jemter,Curl을 이용한 Test 진행하기
-
 ### Project
 #### Architecture
 ![인프라설계](image/인프라설계.png)
