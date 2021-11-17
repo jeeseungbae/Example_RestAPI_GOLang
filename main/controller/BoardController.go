@@ -36,7 +36,7 @@ func responseMessage(responseWriter http.ResponseWriter, value interface{}) {
 func notCorrectDataMessage(responseWriter http.ResponseWriter, request *http.Request) {
 	responseWriter.Header().Set("Content-Type", "application/json")
 	responseWriter.WriteHeader(http.StatusBadRequest)
-	responseMessage(responseWriter, "잘못된 값을 입력하셨습니다.")
+	responseMessage(responseWriter, "잘못된 값을 요청하셨습니다.")
 }
 
 func ReadAll(responseWriter http.ResponseWriter, request *http.Request) {
@@ -47,7 +47,7 @@ func ReadAll(responseWriter http.ResponseWriter, request *http.Request) {
 
 func ReadById(responseWriter http.ResponseWriter, request *http.Request) {
 	sequenceNumber, _ := strconv.Atoi(mux.Vars(request)["id"])
-	if application.ValidateId(sequenceNumber) {
+	if application.IsValidateId(sequenceNumber) {
 		responseWriter.Header().Set("Content-Type", "application/json")
 		responseWriter.WriteHeader(http.StatusOK)
 		responseMessage(responseWriter, application.ReadById(sequenceNumber))
@@ -61,7 +61,7 @@ func ModifyById(responseWriter http.ResponseWriter, request *http.Request) {
 	var bodyData model.Board
 	json.NewDecoder(request.Body).Decode(&bodyData)
 
-	if application.ValidateId(sequenceNumber) {
+	if application.IsValidateId(sequenceNumber) && application.IsNotDuplicateTitle(&bodyData, sequenceNumber) {
 		responseWriter.Header().Set("Content-Type", "application/json")
 		responseWriter.WriteHeader(http.StatusOK)
 		responseMessage(responseWriter, application.ModifyById(bodyData, sequenceNumber))
@@ -73,7 +73,7 @@ func ModifyById(responseWriter http.ResponseWriter, request *http.Request) {
 func DeleteById(responseWriter http.ResponseWriter, request *http.Request) {
 	sequenceNumber, _ := strconv.Atoi(mux.Vars(request)["id"])
 
-	if application.ValidateId(sequenceNumber) {
+	if application.IsValidateId(sequenceNumber) {
 		responseWriter.Header().Set("Content-Type", "application/json")
 		responseWriter.WriteHeader(http.StatusOK)
 		responseMessage(responseWriter, application.DeleteById(sequenceNumber))

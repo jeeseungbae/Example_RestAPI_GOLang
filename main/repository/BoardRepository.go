@@ -33,11 +33,11 @@ func ModifyById(sequenceNumber int, resource model.Board) model.Board {
 
 func DeleteById(sequenceNumber int) model.Board {
 	deleteData := model.Boards[sequenceNumber-ONE]
-	indexIdSetUp(sequenceNumber-ONE, model.Boards)
+	setUpIndexId(sequenceNumber-ONE, model.Boards)
 	return deleteData
 }
 
-func indexIdSetUp(index int, boards []model.Board) {
+func setUpIndexId(index int, boards []model.Board) {
 	createdBoards := append(boards[:index], boards[index+ONE:]...)
 	for i := ONE; i <= len(createdBoards); i++ {
 		createdBoards[i-ONE].Id = i

@@ -16,15 +16,32 @@ func Create(bodyData model.Board) model.Board {
 }
 
 func IsBodyPresent(check *model.Board) bool {
-	dataBlankRemove(check)
+	if isEmptyData(check) {
+		return IsNotDuplicateTitle(check, ZERO)
+	}
+	return false
+}
 
-	if len(check.Title) == ZERO {
+func IsNotDuplicateTitle(data *model.Board, sequenceNumber int) bool {
+	boards := repository.ReadAll()
+	for i, _ := range boards {
+		resourceTitle := boards[i].Title
+		if strings.Contains(resourceTitle, data.Title) && i != sequenceNumber-ONE {
+			return false
+		}
+	}
+	return true
+}
+
+func isEmptyData(data *model.Board) bool {
+	dataBlankRemove(data)
+	if len(data.Title) == ZERO {
 		return false
 	}
-	if len(check.Text) == ZERO {
+	if len(data.Text) == ZERO {
 		return false
 	}
-	if len(check.Writer) == ZERO {
+	if len(data.Writer) == ZERO {
 		return false
 	}
 	return true
@@ -51,7 +68,7 @@ func ModifyById(bodyData model.Board, sequenceNumber int) model.Board {
 }
 
 func modify(sequenceNumber int, bodyData model.Board) model.Board {
-	resource := model.Boards[sequenceNumber-ONE]
+	resource := repository.ReadById(sequenceNumber)
 	if len(bodyData.Text) != ZERO {
 		resource.Text = bodyData.Text
 	}
@@ -68,8 +85,9 @@ func DeleteById(sequenceNumber int) model.Board {
 	return repository.DeleteById(sequenceNumber)
 }
 
-func ValidateId(sequenceNumber int) bool {
-	if len(model.Boards) >= sequenceNumber && sequenceNumber > ZERO {
+func IsValidateId(sequenceNumber int) bool {
+	boards := repository.ReadAll()
+	if len(boards) >= sequenceNumber && sequenceNumber > ZERO {
 		return true
 	}
 	return false
